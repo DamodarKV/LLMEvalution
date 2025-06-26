@@ -34,15 +34,6 @@ async def form_post(
         raise ValueError("OPENAI_API_KEY not set")
     oai_client = OpenAI()
 
-    # Mock actual output
-    try:
-        os.environ[
-            "OPENAI_API_KEY"] = "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"  # Replace securely
-        if "OPENAI_API_KEY" not in os.environ:
-            raise ValueError("OPENAI_API_KEY not set")
-        oai_client = OpenAI()
-    except Exception as e:
-        return HTMLResponse(content=f"<h3>Error: {str(e)}</h3>")
 
     try:
         response = oai_client.chat.completions.create(
