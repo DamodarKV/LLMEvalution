@@ -61,7 +61,7 @@ async def form_post(
 
     # Create the metric
     metric = GEval(
-        name=metrics,
+        name='Correctness',
         criteria=criteria,
         evaluation_params=[LLMTestCaseParams.ACTUAL_OUTPUT, LLMTestCaseParams.EXPECTED_OUTPUT],
         rubric=[
@@ -92,4 +92,6 @@ async def form_post(
         "reason": metric.reason,
         "success": metric.success
     })
+
+    request,llm_input,expected_output,metrics,criteria,score,reason,success
 
