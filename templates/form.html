@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LLM Evaluation Form</title>
+    <style>
+        body {
+            background-color: #111827;
+            color: #e5e7eb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        h2 {
+            color: #f9fafb;
+            border-bottom: 2px solid #4b5563;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        form {
+            background-color: #1f2937;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+            max-width: 900px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #9ca3af;
+        }
+
+        textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #111827;
+            color: #f9fafb;
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        textarea:focus, select:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 5px #10b981;
+        }
+
+        button {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #059669;
+        }
+
+        .results {
+            background-color: #1f2937;
+            margin-top: 2rem;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .result-item {
+            margin-bottom: 1rem;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #9ca3af;
+        }
+
+        .value {
+            color: #f9fafb;
+            margin-left: 0.5rem;
+        }
+
+        .success-true {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .success-false {
+            color: #f87171;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>DeepEval LLM Evaluation</h2>
+    <form action="/" method="post">
+        <label for="llm_input">LLM Input:</label>
+        <textarea id="llm_input" name="llm_input" rows="4" required>{{ llm_input | default('') }}</textarea>
+
+        <label for="metrics">Evaluation Metric:</label>
+        <select id="metrics" name="metrics" required>
+            <option value="">-- Select Metric --</option>
+            <option value="Correctness" {% if metrics == "Correctness" %}selected{% endif %}>Correctness</option>
+            <option value="Coherence" {% if metrics == "Coherence" %}selected{% endif %}>Coherence</option>
+            <option value="Tonality" {% if metrics == "Tonality" %}selected{% endif %}>Tonality</option>
+            <option value="Safety" {% if metrics == "Safety" %}selected{% endif %}>Safety</option>
+        </select>
+
+        <label for="expected_output">LLM Expected Output:</label>
+        <textarea id="expected_output" name="expected_output" rows="8" required>{{ expected_output | default('') }}</textarea>
+
+        <label for="criteria">Criteria</label>
+        <textarea id="criteria" name="criteria" rows="6" required>{{ criteria | default('') }}</textarea>
+
+        <button type="submit">Run Evaluation</button>
+    </form>
+
+    {% if score is defined %}
+    <div class="results">
+        <h3>Evaluation Results</h3>
+        <div class="result-item">
+            <span class="label">Score:</span>
+            <span class="value">{{ score }}</span>
+        </div>
+        <div class="result-item">
+            <span class="label">Reason:</span>
+            <span class="value">{{ reason }}</span>
+        </div>
+        <div class="result-item">
+            <span class="label">Pass (≥ Threshold):</span>
+            <span class="value {% if success %}success-true{% else %}success-false{% endif %}">
+                {{ success }}
+            </span>
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>
